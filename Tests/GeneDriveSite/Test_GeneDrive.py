@@ -2,9 +2,14 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 
-# Set up the Selenium WebDriver
-driver = webdriver.Chrome()  # Change this to the appropriate WebDriver for your browser
+# Create ChromeOptions and enable incognito mode
+chrome_options = Options()
+chrome_options.add_argument("--incognito")
+
+# Create a new instance of the Chrome driver with the specified options
+driver = webdriver.Chrome(options=chrome_options)
 
 # Open the website
 driver.get("https://gene-drive.bmgf.io/")
