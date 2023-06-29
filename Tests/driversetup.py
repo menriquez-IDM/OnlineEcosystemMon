@@ -28,3 +28,5 @@ print("Latest Chrome Driver path is: " + os.getcwd() + "\chromedriver.exe")
 
 # add the chromedriver.exe to the path for linux and mac
 os.environ["PATH"] += os.pathsep + os.getcwd()
+print("Chrome Driver is ready to use")
+print(os.environ["PATH"])
