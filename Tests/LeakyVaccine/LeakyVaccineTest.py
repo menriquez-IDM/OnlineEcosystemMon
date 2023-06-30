@@ -7,7 +7,7 @@ chrome_options = Options()
 chrome_options.add_argument("--incognito")
 
 # Create a new instance of the Chrome driver with the specified options
-driver = webdriver.Chrome(options=chrome_options, executable_path="..\\chromedriver.exe")
+driver = webdriver.Chrome(options=chrome_options)
 
 # Open the website
 driver.get("https://leakyvaccine.bmgf.io/")
