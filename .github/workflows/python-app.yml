@@ -19,6 +19,15 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
+        
+    - name: Install Chrome
+      # You may pin to the exact commit or the version.
+      # uses: logikal-io/install-chrome@074db03e25b1b5d42838b25dcca9b895450e4185
+      uses: logikal-io/install-chrome@v1.0.1
+      with:
+        # The version to install (exactly as in https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable)
+        version:  114.0.5735.198-1
+        
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
