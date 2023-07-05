@@ -6,7 +6,7 @@ Our online ecosystem encompasses various websites, web platforms, and digital to
 The goal for each test is to make sure that the critical path use case is properly working, and in an event of a failure, a notification is sent to  support@idmod.org (or any other appointed owner) automatically.
 
 # Folder Structure
-Under the Test folder you can find all tests related to the sites being monitored
+Under the *tests* folder you can find all tests related to the sites being monitored
 
 # Execution
 The tests run on a nightly Jenkins job: TBD
