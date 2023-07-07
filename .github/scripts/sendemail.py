@@ -14,7 +14,7 @@ def send_email(sender_email, sender_password, recipient_email, subject, message)
 
     try:
         # Connect to the SMTP server
-        server = smtplib.SMTP('smtp.gmail.com', 587)  # Change this for other email providers
+        server = smtplib.SMTP('smtp.office365.com', 587)  # Change this for other email providers
         server.starttls()
 
         # Log in to the sender's email account
@@ -32,10 +32,10 @@ def send_email(sender_email, sender_password, recipient_email, subject, message)
         server.quit()
 
 # Example usage
-sender_email = 'your-email@gmail.com'  # Replace with your email address
+sender_email = 'your-email@gatesfoundation.org'  # Replace with your email address
 sender_password = 'your-email-password'  # Replace with your email password
-recipient_email = 'recipient-email@example.com'  # Replace with recipient's email address
-subject = 'Hello from Python!'
+recipient_email = 'recipient-email@gatesfoundation.org'  # Replace with recipient's email address
+subject = 'Hello from the monitoring GHA'
 message = 'This is the body of the email.'
 
 send_email(sender_email, sender_password, recipient_email, subject, message)
