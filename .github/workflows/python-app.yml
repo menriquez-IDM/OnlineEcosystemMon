@@ -40,12 +40,13 @@ jobs:
         python tests/LeakyVaccine/test.py
 
     - name: Send email
-      run: python .github/scripts/sendemail.py 
       env:
-        SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
-        SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
+        # SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        # SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
         RECIPIENT_EMAIL: minerva.enriquez@gatesfoundation.org
         SUBJECT: Hello from GitHub Actions!
         MESSAGE: This is the email message.
-        
+      run: |
+        python .github/scripts/sendemail.py ${{ secrets.SENDER_EMAIL }} ${{ secrets.SENDER_PASSWORD }}
+          
 
