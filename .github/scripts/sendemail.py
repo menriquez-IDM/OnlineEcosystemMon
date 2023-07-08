@@ -3,6 +3,9 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 def send_email(sender_email, sender_password, recipient_email, subject, message):
+    print("Sender: ", sender_email)
+    print("Recipient: ", recipient_email)
+    
     # Set up the email message
     msg = MIMEMultipart()
     msg['From'] = sender_email
