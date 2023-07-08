@@ -3,7 +3,14 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import sys, os
 
-def send_email(sender_email, sender_password, recipient_email, subject, message):
+def send_email():
+
+    sender_email = os.environ.get('SENDER_EMAIL')
+    sender_password = os.environ.get('SENDER_PASSWORD')
+    recipient_email = os.environ.get('RECIPIENT_EMAIL')
+    subject = os.environ.get('SUBJECT')
+    message = os.environ.get('MESSAGE')
+    
     print("Sender: ", sender_email)
     print("Recipient: ", recipient_email)
     
@@ -36,13 +43,7 @@ def send_email(sender_email, sender_password, recipient_email, subject, message)
         server.quit()
 
  # Example usage
-print(os.environ)
-sender_email = os.environ.get('SENDER_EMAIL')
-sender_password = os.environ.get('SENDER_PASSWORD')
-recipient_email = os.environ.get('RECIPIENT_EMAIL')
-subject = os.environ.get('SUBJECT')
-message = os.environ.get('MESSAGE')
-
-send_email(sender_email, sender_password, recipient_email, subject, message)
+#print(os.environ)
+send_email()
 
 
