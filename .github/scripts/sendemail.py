@@ -34,13 +34,13 @@ def send_email(sender_email, sender_password, recipient_email, subject, message)
         # Disconnect from the SMTP server
         server.quit()
 
-# Example usage
-sender_email = 'your-email@gatesfoundation.org'  # Replace with your email address
-sender_password = 'your-email-password'  # Replace with your email password
-recipient_email = 'recipient-email@gatesfoundation.org'  # Replace with recipient's email address
-subject = 'Hello from the monitoring GHA'
-message = 'This is the body of the email.'
+# # Example usage
+# sender_email = 'your-email@gatesfoundation.org'  # Replace with your email address
+# sender_password = 'your-email-password'  # Replace with your email password
+# recipient_email = 'recipient-email@gatesfoundation.org'  # Replace with recipient's email address
+# subject = 'Hello from the monitoring GHA'
+# message = 'This is the body of the email.'
 
-send_email(sender_email, sender_password, recipient_email, subject, message)
+# send_email(sender_email, sender_password, recipient_email, subject, message)
 
 
