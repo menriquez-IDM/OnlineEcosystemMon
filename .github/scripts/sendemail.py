@@ -36,7 +36,6 @@ try:
 
 except Exception as e:
     print(f"Error sending email: {str(e)}")
-    print(os.environ)
 
 finally:
     # Disconnect from the SMTP server
