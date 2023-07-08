@@ -1,7 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import sys
+import sys, os
 
 def send_email(sender_email, sender_password, recipient_email, subject, message):
     print("Sender: ", sender_email)
@@ -35,13 +35,14 @@ def send_email(sender_email, sender_password, recipient_email, subject, message)
         # Disconnect from the SMTP server
         server.quit()
 
-# # Example usage
-# sender_email = 'your-email@gatesfoundation.org'  # Replace with your email address
-# sender_password = 'your-email-password'  # Replace with your email password
-# recipient_email = 'recipient-email@gatesfoundation.org'  # Replace with recipient's email address
-# subject = 'Hello from the monitoring GHA'
-# message = 'This is the body of the email.'
+ # Example usage
+print(os.environ)
+sender_email = os.environ.get('SENDER_EMAIL')
+sender_password = os.environ.get('SENDER_PASSWORD')
+recipient_email = os.environ.get('RECIPIENT_EMAIL')
+subject = os.environ.get('SUBJECT')
+message = os.environ.get('MESSAGE')
 
-send_email(sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+send_email(sender_email, sender_password, recipient_email, subject, message)
 
 
