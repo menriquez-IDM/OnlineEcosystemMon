@@ -1,6 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import sys
 
 def send_email(sender_email, sender_password, recipient_email, subject, message):
     print("Sender: ", sender_email)
@@ -41,6 +42,6 @@ def send_email(sender_email, sender_password, recipient_email, subject, message)
 # subject = 'Hello from the monitoring GHA'
 # message = 'This is the body of the email.'
 
-# send_email(sender_email, sender_password, recipient_email, subject, message)
+send_email(sys.argv[0], sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 
 
