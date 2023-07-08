@@ -47,4 +47,19 @@ jobs:
         RECIPIENT_EMAIL: minerva.enriquez@gatesfoundation.org
         SUBJECT: Hello from GitHub Actions!
         MESSAGE: This is the email message.
-  
+        
+    - name: Send email 02
+      # You may pin to the exact commit or the version.
+      # uses: dawidd6/action-send-mail@fa73d6accd067d4151b71f124ed939da15097abf
+      uses: dawidd6/action-send-mail@v3.7.2
+      with:
+        server_address: smtp.gmail.com
+        server_port: 586
+        secure: True
+        username: ${{ secrets.SENDER_EMAIL }}
+        password: ${{ secrets.SENDER_PASSWORD }}
+        subject: "Build Result Test"
+        to: minerva.enriquez@gatesfoundation.org
+        from: ma.minerva.enriquez@gmail.com
+        body: " this is the result of your build "
+
