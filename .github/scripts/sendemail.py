@@ -24,7 +24,7 @@ msg.attach(MIMEText(message, 'plain'))
 
 try:
     # Connect to the SMTP server
-    server = smtplib.SMTP('smtp-relay.gmail.com', 587)  # Change this for other email providers
+    server = smtplib.SMTP('smtp.gmail.com', 587)  # Change this for other email providers
     server.starttls()
 
     # Log in to the sender's email account
