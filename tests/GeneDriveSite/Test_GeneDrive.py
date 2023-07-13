@@ -31,6 +31,9 @@ try:
     driver.quit()
     
 except Exception as e:
+    # try to take a screenshot
+    driver.save_screenshot("screenshot.png")
+    
     print(e)
     print("Exception occurred.  Generating bug report...")
     bug_report_generator = BugReportGenerator(e)

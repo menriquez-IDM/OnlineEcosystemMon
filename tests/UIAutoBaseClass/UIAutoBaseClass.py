@@ -51,6 +51,7 @@ class ChromeTest:
             # Open the website
             driver = webdriver.Chrome(service=service, options=chrome_options)
             driver.get(URL)
+            driver.maximize_window()
             return driver
         else:
             error_message = f'{self.chrome_driver_path}: File does not exist. ' \
