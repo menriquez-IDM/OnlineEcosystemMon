@@ -46,7 +46,7 @@ class BugReportGenerator:
 
         # Save the bug report to a file
         name = BugReportGenerator.generate_valid_filename(title)
-        file_path = f"./{name}.txt"
+        file_path = f"./{name}.log"
         
         with open(file_path, "w") as bug_report_file:
             bug_report_file.write(bug_report_template)

@@ -2,6 +2,7 @@ from pathlib import Path
 import os, sys
 os.chdir(str(Path(sys.argv[0]).parent))
 sys.path.append( str(Path('../UIAutoBaseClass').resolve().absolute()) )
+sys.path.append( str(Path('../BugReportGenerator').resolve().absolute()) )
 
 from selenium.webdriver.common.by import By
 from UIAutoBaseClass import ChromeTest
