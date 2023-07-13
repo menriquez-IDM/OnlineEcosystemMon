@@ -5,12 +5,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-from pathlib import Path
-import os, sys
-os.chdir(str(Path(sys.argv[0]).parent))
-sys.path.append( str(Path('../UIAutoBaseClass').resolve().absolute()) )
-
-
 class ChromeTest:
     def __init__(self):
         """
@@ -48,11 +42,11 @@ class ChromeTest:
 
             # Set Chrome options
             chrome_options = Options()
-            # chrome_options.headless = True
-            # chrome_options.add_argument('--no-sandbox')
-            # chrome_options.add_argument('--disable-dev-shm-usage')
+            chrome_options.headless = True
+            chrome_options.add_argument('--no-sandbox')
+            chrome_options.add_argument('--disable-dev-shm-usage')
             chrome_options.add_argument("--incognito")
-            # chrome_options.add_argument('--headless')  # Run Chrome in headless mode (without GUI)
+            chrome_options.add_argument('--headless')  # Run Chrome in headless mode (without GUI)
 
             # Open the website
             driver = webdriver.Chrome(service=service, options=chrome_options)
