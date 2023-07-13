@@ -14,25 +14,13 @@ from BugReportGenerator import BugReportGenerator
 import time
 
 url = "https://gene-drive.bmgf.io/"
-driver = ChromeTest().open_url(url) # Open the website
     
 try:
     # find the button with id = close-greeting-modal and click it
-    driver.implicitly_wait(7)
-    buttonok = driver.find_element(By.ID, "close-greeting-modal")
-    buttonok.click()
-    
+    driver = ChromeTest().open_url(url) 
     driver.implicitly_wait(2)
-    # Define a list of core element locators -- add more if as needed --
-    element_locators = [(By.ID, "run-elim-prob-matrices")]
-
-    # Validate the presence of each core element
-    for locator in element_locators:
-        element_present = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located(locator)
-        )
-        print("Validated presence of element with locator: ", locator)
-        
+    driver.find_element(By.ID, "close-greeting-modal").click()
+    driver.implicitly_wait(2)       
     driver.find_element(By.ID, "run-elim-prob-matrices").click()
     
     # verify if matrix was displayed:

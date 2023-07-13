@@ -39,8 +39,8 @@ class BugReportGenerator:
         \n## Property Site:\n{property_site} 
         \n### Title:        \n{title}
         \n## Exception Type:\n{exception_type}
-        \n## Exception Message: \n{exception_message}
-        \n## Traceback:       \n{traceback_info}
+        \n## Exception Message: \n```\n{exception_message}\n```
+        \n## Traceback:       \n```\n{traceback_info}\n```
         \n## Date:            \n{datetime.datetime.now()}                  
         """
 
