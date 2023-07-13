@@ -27,13 +27,12 @@ try:
     driver.find_element(By.ID, "elim-prob-matrices")
     print("Validated presence of element with locator: ", "elim-prob-matrices")
     time.sleep(3)
-    
+    driver.save_screenshot("screenshot.png")
     driver.quit()
     
 except Exception as e:
     # try to take a screenshot
     driver.save_screenshot("screenshot.png")
-    
     print(e)
     print("Exception occurred.  Generating bug report...")
     bug_report_generator = BugReportGenerator(e)
