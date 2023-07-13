@@ -12,10 +12,9 @@ class ChromeTest:
         Initializes the ChromeTest class.
         Sets the path for the ChromeDriver based on the operating system.
         """
-        if os.name == "linux":
-            self.chrome_driver_path = '/usr/local/bin/chromedriver'
+        self.chrome_driver_path = '/usr/local/bin/chromedriver'
 
-        else:
+        if os.name == 'nt':
             self.script_path = os.path.dirname(os.path.realpath(__file__))
             self.chrome_driver_path = os.path.join(self.script_path, 'chromedriver.exe')
             # add the curren directory to the PYTHONPATH
