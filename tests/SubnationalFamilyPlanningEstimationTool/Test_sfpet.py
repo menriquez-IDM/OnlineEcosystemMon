@@ -15,14 +15,29 @@ try:
 
     driver.find_element(By.ID, "onetrust-accept-btn-handler").click()
 
-    driver.implicitly_wait(10)
-
-    # Find the chart1 element
-    chart1 = driver.find_element(By.ID, "chart1")
     driver.implicitly_wait(15)
-    if chart1:  print("PASS:  chart1 exists.")
-    else: print("chart1 does not exist.")
 
+    # Main Map
+    chart1 = driver.find_element(By.ID, "chart1")
+    driver.implicitly_wait(25)
+    if chart1:  print("PASS:  Main Map exists.")
+    else: print("Main Map (chart1) does not exist.")
+    driver.implicitly_wait(25)
+    
+    # Comparison map    
+    chart2= driver.find_element(By.ID, "chart2")
+    driver.implicitly_wait(25)
+    if chart2:  print("PASS:  Comparison Map exists.")
+    else: print("Comparison map (chart2) does not exist.")
+    driver.implicitly_wait(25)
+    
+    # Women 15-24 
+    chart68 = driver.find_element(By.ID, "chart68")
+    driver.implicitly_wait(25)
+    if chart68:  print("PASS:  Women 15-24 chart exists.")
+    else: print("Women 15-24 (chart68) does not exist.")
+    
+    
     # If it reaches this point, then report as successful    
     print("PASS:  Subnational Family Planning Estimation Tool test completed successfully.")
 
