@@ -46,7 +46,7 @@ except Exception as e:
     print(e)
     print("Exception occurred. Generating bug report...")
     bug_report_generator = BugReportGenerator(e)
-    bug_report_generator.generate_bug_report(url, title="LeakyVaccine Page 1 and Page 2 failed to load")
+    bug_report_generator.generate_bug_report(url, title="LeakyVaccine failed to fully load")
     
 finally:
     try:
