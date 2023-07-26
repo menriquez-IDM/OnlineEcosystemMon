@@ -1,11 +1,12 @@
 Subnational Family Planning Estimation Tool
+============
 
 SITE: https://sfpet.bmgf.io
-CUSTOMER:  
-TECHNOLOGIES:
-- 
--
--
+
+CUSTOMER:  Josh Proctor
+
 
 CONTACT: tbd
 
+REPO:
+https://github.com/InstituteforDiseaseModeling/SmallAreaEstimationForSurveyIndicators 
