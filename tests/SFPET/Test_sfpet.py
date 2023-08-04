@@ -40,12 +40,12 @@ except Exception as e:
     print("Exception occurred. Generating bug report...")
     bug_report_generator = BugReportGenerator(e)
     bug_report_generator.generate_bug_report(url, title="Subnational Family Planning Estimation Tool Failed to fully load")
+    with open("SFPET_page_source.html", "w", encoding="utf-8") as f:
+        f.write(driver.page_source)
     
 finally:
     try:
         driver.save_screenshot("screenshot.png")
-        with open("page_source.html", "w", encoding="utf-8") as f:
-            f.write(driver.page_source)
             
     except Exception as screenshot_error:
         print("Failed to capture screenshot:", screenshot_error)
