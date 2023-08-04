@@ -1,46 +1,40 @@
 from pathlib import Path
-import os, sys
+import os, sys, time
 os.chdir(str(Path(sys.argv[0]).parent))
 sys.path.append( str(Path('../UIAutoBaseClass').resolve().absolute()) )
 sys.path.append( str(Path('../BugReportGenerator').resolve().absolute()) )
 
 from selenium.webdriver.common.by import By
+from selenium import webdriver
 from UIAutoBaseClass import ChromeTest
 from BugReportGenerator import BugReportGenerator
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 
 url = "https://sfpet.bmgf.io/"
 try:    
     driver = ChromeTest().open_url(url)
-    driver.implicitly_wait(5)
+    wait = WebDriverWait(driver, 25)
 
-    driver.find_element(By.ID, "onetrust-accept-btn-handler").click()
+    accept_button = wait.until(EC.element_to_be_clickable((By.ID, "onetrust-accept-btn-handler")))
+    accept_button.click()
+    print("Accept button clicked.")   
+    
+    all_charts = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR,"[id^=chart]")))
+    print("Total charts found: ",  len(all_charts))
 
-    driver.implicitly_wait(15)
-
-    # Main Map
-    chart1 = driver.find_element(By.ID, "chart1")
-    driver.implicitly_wait(25)
-    if chart1:  print("PASS:  Main Map exists.")
-    else: print("Main Map (chart1) does not exist.")
-    driver.implicitly_wait(25)
+    if len(all_charts) != 15:
+        raise Exception(f"FAIL:  Expected 15 charts, but found {str(len(all_charts))} charts: \n\n  {all_charts}")
+    else:
+        for chart in all_charts: 
+            print("Found Chart: ", chart.get_attribute("id"))
+        print("Clicking on the Main and Comparison maps ...")
+        all_charts[0].click()   
+        all_charts[1].click()   
+        
+        print("PASS:  Subnational Family Planning Estimation Tool test completed successfully.")
     
-    # Comparison map    
-    chart2= driver.find_element(By.ID, "chart2")
-    driver.implicitly_wait(25)
-    if chart2:  print("PASS:  Comparison Map exists.")
-    else: print("Comparison map (chart2) does not exist.")
-    driver.implicitly_wait(25)
-    
-    # Women 15-24 
-    chart68 = driver.find_element(By.ID, "chart68")
-    driver.implicitly_wait(25)
-    if chart68:  print("PASS:  Women 15-24 chart exists.")
-    else: print("Women 15-24 (chart68) does not exist.")
-    
-    
-    # If it reaches this point, then report as successful    
-    print("PASS:  Subnational Family Planning Estimation Tool test completed successfully.")
-
 except Exception as e:
     print(e)
     print("Exception occurred. Generating bug report...")
@@ -50,6 +44,9 @@ except Exception as e:
 finally:
     try:
         driver.save_screenshot("screenshot.png")
+        with open("page_source.html", "w", encoding="utf-8") as f:
+            f.write(driver.page_source)
+            
     except Exception as screenshot_error:
         print("Failed to capture screenshot:", screenshot_error)
         
