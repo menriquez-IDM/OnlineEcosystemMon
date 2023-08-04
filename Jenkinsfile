@@ -20,7 +20,7 @@ podTemplate(
 		}
 		stage('Code Checkout') {
 			echo "Running on ${env.BRANCH_NAME} branch"
-			git branch: "AddingBaseClasses",
+			git branch: "master",
 			credentialsId: '704061ca-54ca-4aec-b5ce-ddc7e9eab0f2',
 			url: 'git@github.com:menriquez-IDM/OnlineEcosystemMon.git'
 		}
@@ -40,7 +40,7 @@ podTemplate(
             sh 'wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip'
             sh 'unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/'
 		    sh '''
-		        echo VERSIONS------
+		        echo VERSIONS------------------------
 		        google-chrome-stable --version
 		        chromedriver --version
             '''
@@ -54,6 +54,7 @@ podTemplate(
     		    sh 'ls -a'
     			sh 'python3 tests/LeakyVaccine/Test_LeakyVaccine.py'
     			sh 'python3 tests/GeneDriveSite/Test_GeneDrive.py'
+    			sh 'python3 tests/SFPET/Test_sfpet.py'
     		}
 		} catch(e) {
 		    build_ok = false
@@ -82,7 +83,7 @@ podTemplate(
                   )]) {
 
                     sh '''
-                        git config --global --add safe.directory /home/jenkins/agent/workspace/menriquez/LiveSitesMonitoringNightlyWithNotification
+                        git config --global --add safe.directory /home/jenkins/agent/workspace/menriquez/LiveSitesMonitoringNightly
                         for f in $(find . -type f -name "*.log")
                         do
                           printf "Tryng to log ISSUE...  $f"  
@@ -96,8 +97,8 @@ podTemplate(
                         done
                     '''
                 }
-    	    }
-	}	
+    		}
+		}	
     }
   }
 }
