@@ -37,7 +37,7 @@ jobs:
     - name: Test with pytest
       run: |
         python tests/LeakyVaccine/Test_LeakyVaccine.py
-        python tests/SubnationalFamilyPlanningEstimationTool/Test_sfpet.py
+        python tests/SFPET/Test_sfpet.py
         python tests/GeneDriveSite/Test_GeneDrive.py
 
     - name: Send email
