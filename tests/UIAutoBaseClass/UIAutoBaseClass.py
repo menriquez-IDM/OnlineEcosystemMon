@@ -33,6 +33,7 @@ class ChromeTest:
         Raises:
             FileNotFoundError: If the ChromeDriver executable file is not found.
         """
+        print('\n** Site URL:', URL)
         if os.path.isfile(self.chrome_driver_path):
             print('Chrome driver found in path:', self.chrome_driver_path)
             # Initialize ChromeDriver service
@@ -43,6 +44,7 @@ class ChromeTest:
             # Set Chrome options
             chrome_options = Options()
             chrome_options.headless = True
+            chrome_options.page_load_strategy = 'eager'
             chrome_options.add_argument('--no-sandbox')
             chrome_options.add_argument('--disable-dev-shm-usage')
             chrome_options.add_argument("--incognito")
