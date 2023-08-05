@@ -13,4 +13,5 @@ Under the *tests* folder you can find all tests related to the sites being monit
 The tests run on a nightly Jenkins job: TBD
 
 ## Reporting
- ...... 
+Bug report
+Email
