@@ -33,21 +33,26 @@ jobs:
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip install -r requirements.txt
+        pip install setuptools wheel
+        python setup.py sdist bdist_wheel
+        pip install -e .
 
     - name: Test with pytest
       run: |
         python tests/LeakyVaccine/Test_LeakyVaccine.py
         python tests/SFPET/Test_sfpet.py
         python tests/GeneDriveSite/Test_GeneDrive.py
+        python tests/CCWebservice/Test_ccwebservice.py
+        
 
     - name: Send email
       env:
-        # SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
-        # SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
+        SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+        SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
         RECIPIENT_EMAIL: minerva.enriquez@gatesfoundation.org
         SUBJECT: Hello from GitHub Actions!
         MESSAGE: This is the email message.
       run: |
-        python .github/scripts/sendemail.py ${{ secrets.SENDER_EMAIL }} ${{ secrets.SENDER_PASSWORD }}
+        python .github/scripts/sendemail.py SENDER_EMAIL SENDER_PASSWORD
           
 
