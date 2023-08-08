@@ -42,6 +42,8 @@ jobs:
         python tests/LeakyVaccine/Test_LeakyVaccine.py
         python tests/SFPET/Test_sfpet.py
         python tests/GeneDriveSite/Test_GeneDrive.py
+        python tests/CCWebservice/Test_ccwebservice.py
+        
 
     - name: Send email
       env:
