@@ -24,7 +24,7 @@ def check_service_status(url, timeout=5):
         bug.generate_bug_report(e, url, "An error occurred")
     
 if __name__ == "__main__":
-    service_url = "http://10.24.46.20:8085?v=2&image_name=nyu/dtk"
+    service_url = "http://10.24.46.20:8083?v=2&image_name=nyu/dtk"
     check_service_status(service_url)
     
     proxy_url = "http://10.24.46.30/api/?v=2&search_name="
