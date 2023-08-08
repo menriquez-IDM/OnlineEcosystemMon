@@ -1,18 +1,15 @@
-from pathlib import Path
-import os, sys
-os.chdir(str(Path(sys.argv[0]).parent))
-sys.path.append( str(Path('../UIAutoBaseClass').resolve().absolute()) )
-sys.path.append( str(Path('../BugReportGenerator').resolve().absolute()) )
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from UIAutoBaseClass import ChromeTest
-from BugReportGenerator import BugReportGenerator
+from sysmonlib import BugReportGenerator as bug
+from sysmonlib import UIAutoBaseClass as UITest
+import os
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 url = "https://leakyvaccine.bmgf.io/"
 try:    
 
-    driver = ChromeTest().open_url(url)
+    driver = UITest.ChromeTest().open_url(url)
     wait = WebDriverWait(driver, 25)
 
     accept_button = wait.until(EC.element_to_be_clickable((By.ID, "ok")))
@@ -59,8 +56,7 @@ try:
 except Exception as e:
     print(e)
     print("Exception occurred. Generating bug report...")
-    bug_report_generator = BugReportGenerator(e)
-    bug_report_generator.generate_bug_report(url, title="LeakyVaccine failed to fully load")
+    bug.generate_bug_report(e, url, title="Failure in LeakyVaccine site")
     with open("LeakyVaccine_page_source.html", "w", encoding="utf-8") as f:
         f.write(driver.page_source)
             
