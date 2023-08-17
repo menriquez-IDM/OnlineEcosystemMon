@@ -46,13 +46,13 @@ def generate_bug_report( exception, property_site, title):
     traceback_info = traceback.format_exc()
 
     # Create the bug report template
-    bug_report_template = f"""# Issue Report:
-    \n## Property Site:\n{property_site} 
-    \n### Title:        \n{title}
-    \n## Exception Type:\n{exception_type}
-    \n## Exception Message: \n```\n{exception_message}\n```
-    \n## Traceback:       \n```\n{traceback_info}\n```
-    \n## Date:            \n{datetime.datetime.now()}                  
+    bug_report_template = f"""<h1>Issue Report:</h1>
+    <h2>Property Site:</h2>{property_site} 
+    <h2>Title:</h2>{title}
+    <h2>Exception Type:</h2>{exception_type}
+    <h2>Exception Message: </h2>```\n{exception_message}\n```
+    <h2>Traceback:</h2>```\n{traceback_info}\n```
+    <h2>Date: </h2>{datetime.datetime.now()}                  
     """
 
     # Save the bug report to a file
