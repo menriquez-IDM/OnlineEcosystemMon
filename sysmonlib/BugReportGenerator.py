@@ -49,10 +49,10 @@ def generate_bug_report( exception, property_site, title):
     bug_report_template = f"""<h1>Issue Report:</h1>
     <h2>Property Site:</h2>{property_site} 
     <h2>Title:</h2>{title}
-    <h2>Exception Type:</h2>{exception_type}
-    <h2>Exception Message: </h2>```\n{exception_message}\n```
-    <h2>Traceback:</h2>```\n{traceback_info}\n```
-    <h2>Date: </h2>{datetime.datetime.now()}                  
+    <h2>Exception Type:</h2><p>{exception_type}</p>
+    <h2>Exception Message:</h2><br>  ```\n{exception_message}\n```
+    <h2>Traceback:</h2><br> ```\n{traceback_info}\n```
+    <h4>Date: </h4> {datetime.datetime.now()}                  
     """
 
     # Save the bug report to a file
