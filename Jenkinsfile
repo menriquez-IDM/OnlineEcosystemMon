@@ -13,6 +13,8 @@ podTemplate(
   node(POD_LABEL) {
     container('slurm-container-310'){
 		def build_ok = true
+		def send_to = ''
+		def email_files = []
 		def create_bug = false
 		stage('Cleanup Workspace') {		    
 				cleanWs()
@@ -20,15 +22,19 @@ podTemplate(
 		}
 		stage('Code Checkout') {
 			echo "Running on ${env.BRANCH_NAME} branch"
-			git branch: "master",
+			git branch: "TEST",
 			credentialsId: '704061ca-54ca-4aec-b5ce-ddc7e9eab0f2',
 			url: 'git@github.com:menriquez-IDM/OnlineEcosystemMon.git'
 		}
+
 		stage('Setup UI Test Environment') {
 		    sh 'cd tests'
 			sh 'python3 -m pip install --upgrade pip'
 			sh 'pip3 install -r requirements.txt'
 			sh 'python3 -m pip install --upgrade setuptools'
+			sh 'pip install setuptools wheel'
+			sh 'python setup.py sdist bdist_wheel'
+			sh 'pip install -e .'
 			sh 'pip3 freeze'
 		}
 		stage('Install Driver'){
@@ -49,18 +55,24 @@ podTemplate(
             sh 'printenv PATH'
 
 		}
-		try {
-    		stage('Run Test') {
-    		    sh 'ls -a'
-    			sh 'python3 tests/LeakyVaccine/Test_LeakyVaccine.py'
-    			sh 'python3 tests/GeneDriveSite/Test_GeneDrive.py'
-    			sh 'python3 tests/SFPET/Test_sfpet.py'
-    		}
-		} catch(e) {
-		    build_ok = false
-		    create_bug = true
-		    echo e.toString()
+		stage('Run Test') {
+		    sh 'python tests/CCWebservice/Test_ccwebservice.py'
 		}
+
+// 		try {
+//     		stage('Run Test') {
+//     		    sh 'ls -a'
+//     			sh 'python3 tests/LeakyVaccine/Test_LeakyVaccine.py'
+//     			sh 'python3 tests/GeneDriveSite/Test_GeneDrive.py'
+//     			sh 'python3 tests/SFPET/Test_sfpet.py'
+//     			sh 'python tests/CCWebservice/Test_ccwebservice.py'
+//     		}
+// 		} catch(e) {
+// 		    build_ok = false
+// 		    create_bug = true
+// 		    echo e.toString()
+// 		}
+		
 //		if(create_bug){
 		if(true){
     		stage('Install gh')
@@ -98,7 +110,19 @@ podTemplate(
                     '''
                 }
     		}
-		}	
+		}
+        email_files = sh(script: 'find . -type f -name "*.log"', returnStdout: true).split() 
+        for (int i = 0; i < email_files.size(); i++) {
+            stage ("Emailing Issue ${i} ") {
+				sendTo = readFile(email_files[i]).split('\n')[0]
+                emailext (to: '${sendTo}', //Comma separated list of recipients
+                            subject: "SysMon -> ${env.JOB_NAME}",
+                            body: "URL de build: ${env.BUILD_URL} ${ readFile(email_files[i])}",
+                            mimeType: 'text/html');
+                // subject: "Project name -> ${env.JOB_NAME}",
+                //body: "<b>Example</b><br>Project: <br> ${email_files[i]} <br>  ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}";
+            }
+        }
     }
   }
 }
