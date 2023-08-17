@@ -55,9 +55,10 @@ def generate_bug_report( exception, property_site, title, email_to="minerva.enri
     \n## Date:            \n{datetime.datetime.now()}                  
     """
     
-    email_template = f"""{email_to}\n
+    email_template = f"""
+    {email_to}\n
+    Issues with: {property_site} site \n
     <h1>Issue Report:</h1>
-    <h2>Property Site:</h2>{property_site} 
     <h2>Issue:</h2>{title}
     <br>Please note, a bug has been created for your issue. Once the issue has been resolved, please make sure it is closed.<br>
     <h2>Traceback:</h2><br> {traceback_info}
