@@ -56,7 +56,7 @@ def generate_bug_report( exception, property_site, title, email_to="minerva.enri
     """
     
     email_template = f"""{email_to}\n
-    Issues with: {property_site} site \n
+    ALERT! {property_site} site \n
     <h1>Issue Report:</h1>
     <h2>Issue:</h2>{title}
     <br>Please note, a bug has been created for your issue. Once the issue has been resolved, please make sure it is closed.<br>
