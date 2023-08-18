@@ -39,31 +39,27 @@ podTemplate(
 			sh 'pip3 freeze'
 		}
 		stage('Install Driver'){
-          sh 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
-          sh 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-          sh 'apt-get -y update'
-          sh 'apt-get install -y google-chrome-stable'
-          sh 'apt-get install -yqq unzip'
-          sh 'wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip'
-          sh 'unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/'
-          sh '''
-              echo VERSIONS------------------------
-              google-chrome-stable --version
-              chromedriver --version
-              '''
-        sh 'ls -l'
-        sh 'export PATH="/usr/local/bin/chromedriver:$PATH"'
-        sh 'printenv PATH'
+
+      sh 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
+      sh 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+      sh 'apt-get -y update'
+      sh 'apt-get install -y google-chrome-stable'
+      sh 'apt-get install -yqq unzip'
+      sh 'wget -O /tmp/chromedriver16.zip https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/116.0.5845.96/linux64/chromedriver-linux64.zip'
+      sh 'unzip -p /tmp/chromedriver16.zip chromedriver-linux64/chromedriver > /usr/local/bin/chromedriver'
+      sh 'chmod +x /usr/local/bin/chromedriver'
+      sh '''
+          echo VERSIONS------------------------
+          google-chrome-stable --version
+          chromedriver --version
+          '''
+      sh 'export PATH="/usr/local/bin/chromedriver:$PATH"'
+      sh 'printenv PATH'
 
 		}
-		// stage('Run Test') {
-		//     sh 'python tests/CCWebservice/Test_ccwebservice.py'
-    //     sh 'ls -l'
-		// }
-
 		try {
     		stage('Run Test') {
-    		    sh 'ls -a'
+    		  sh 'ls -a'
     			sh 'python3 tests/LeakyVaccine/Test_LeakyVaccine.py'
     			sh 'python3 tests/GeneDriveSite/Test_GeneDrive.py'
     			sh 'python3 tests/SFPET/Test_sfpet.py'
