@@ -13,16 +13,17 @@ podTemplate(
   node(POD_LABEL) {
     container('slurm-container-310'){
 		def build_ok = true
-		def send_to = ''
-		def email_files = []
 		def create_bug = false
+		def send_to = ''
+		def subject_line = ''
+		
 		stage('Cleanup Workspace') {		    
 				cleanWs()
 				echo "Cleaned Up Workspace For Project"
 		}
 		stage('Code Checkout') {
 			echo "Running on ${env.BRANCH_NAME} branch"
-			git branch: "TEST",
+			git branch: "email_incorporation",
 			credentialsId: '704061ca-54ca-4aec-b5ce-ddc7e9eab0f2',
 			url: 'git@github.com:menriquez-IDM/OnlineEcosystemMon.git'
 		}
@@ -38,40 +39,41 @@ podTemplate(
 			sh 'pip3 freeze'
 		}
 		stage('Install Driver'){
-            sh 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
-            sh 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-            sh 'apt-get -y update'
-            sh 'apt-get install -y google-chrome-stable'
-            sh 'apt-get install -yqq unzip'
-            sh 'wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip'
-            sh 'unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/'
-		    sh '''
-		        echo VERSIONS------------------------
-		        google-chrome-stable --version
-		        chromedriver --version
-            '''
-		    sh 'ls -l'
-	        sh 'export PATH="/usr/local/bin/chromedriver:$PATH"'
-            sh 'printenv PATH'
+          sh 'wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
+          sh 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sh 'apt-get -y update'
+          sh 'apt-get install -y google-chrome-stable'
+          sh 'apt-get install -yqq unzip'
+          sh 'wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip'
+          sh 'unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/'
+          sh '''
+              echo VERSIONS------------------------
+              google-chrome-stable --version
+              chromedriver --version
+              '''
+        sh 'ls -l'
+        sh 'export PATH="/usr/local/bin/chromedriver:$PATH"'
+        sh 'printenv PATH'
 
 		}
-		stage('Run Test') {
-		    sh 'python tests/CCWebservice/Test_ccwebservice.py'
-		}
+		// stage('Run Test') {
+		//     sh 'python tests/CCWebservice/Test_ccwebservice.py'
+    //     sh 'ls -l'
+		// }
 
-// 		try {
-//     		stage('Run Test') {
-//     		    sh 'ls -a'
-//     			sh 'python3 tests/LeakyVaccine/Test_LeakyVaccine.py'
-//     			sh 'python3 tests/GeneDriveSite/Test_GeneDrive.py'
-//     			sh 'python3 tests/SFPET/Test_sfpet.py'
-//     			sh 'python tests/CCWebservice/Test_ccwebservice.py'
-//     		}
-// 		} catch(e) {
-// 		    build_ok = false
-// 		    create_bug = true
-// 		    echo e.toString()
-// 		}
+		try {
+    		stage('Run Test') {
+    		    sh 'ls -a'
+    			sh 'python3 tests/LeakyVaccine/Test_LeakyVaccine.py'
+    			sh 'python3 tests/GeneDriveSite/Test_GeneDrive.py'
+    			sh 'python3 tests/SFPET/Test_sfpet.py'
+    			sh 'python3 tests/CCWebservice/Test_ccwebservice.py'
+    		}
+		} catch(e) {
+		    build_ok = false
+		    create_bug = true
+		    echo e.toString()
+		}
 		
 //		if(create_bug){
 		if(true){
@@ -111,16 +113,20 @@ podTemplate(
                 }
     		}
 		}
-        email_files = sh(script: 'find . -type f -name "*.log"', returnStdout: true).split() 
+
+
+        email_files = sh(script: 'find . -type f -name "*email.txt"', returnStdout: true).split() 
+        def email_lines = readFile(email_files[0]).split('\n')
         for (int i = 0; i < email_files.size(); i++) {
             stage ("Emailing Issue ${i} ") {
-				sendTo = readFile(email_files[i]).split('\n')[0]
-                emailext (to: '${sendTo}', //Comma separated list of recipients
-                            subject: "SysMon -> ${env.JOB_NAME}",
-                            body: "URL de build: ${env.BUILD_URL} ${ readFile(email_files[i])}",
+
+                send_to = email_lines[0]
+                subject_line = email_lines[2]
+                echo "Sending email to...   ${send_to}"
+                emailext (to: "${send_to}", 
+                            subject: "${subject_line}",
+                            body: "Assigned to: ${ readFile(email_files[i])}",
                             mimeType: 'text/html');
-                // subject: "Project name -> ${env.JOB_NAME}",
-                //body: "<b>Example</b><br>Project: <br> ${email_files[i]} <br>  ${env.JOB_NAME} <br>Build Number: ${env.BUILD_NUMBER} <br> URL de build: ${env.BUILD_URL}";
             }
         }
     }
