@@ -23,7 +23,7 @@ def generate_valid_filename(str):
 
         
 
-def generate_bug_report( exception, property_site, title):
+def generate_bug_report( exception, property_site, title, email_to="minerva.enriquez@gatesfoundation.org"):
     """
     Generates a bug report file based on the provided exception, property site, and title.
 
@@ -54,13 +54,27 @@ def generate_bug_report( exception, property_site, title):
     \n## Traceback:       \n```\n{traceback_info}\n```
     \n## Date:            \n{datetime.datetime.now()}                  
     """
+    
+    email_template = f"""{email_to}\n
+    ALERT! {property_site} site \n
+    <h1>Issue Report:</h1>
+    <h2>Issue:</h2>{title}
+    <br>Please note, a bug has been created for your issue. Once the issue has been resolved, please make sure it is closed.<br>
+    <h2>Traceback:</h2><br> {traceback_info}
+    <h4>Date: </h4> {datetime.datetime.now()}                  
+    """
 
     # Save the bug report to a file
     name = generate_valid_filename(title)
-    file_path = f"./tests/{name}.log"
+    bug_file = f"./tests/{name}.log"
+    email_body = f"./tests/{name}email.txt"
     
-    with open(file_path, "w") as bug_report_file:
+    with open(bug_file, "w") as bug_report_file:
         bug_report_file.write(bug_report_template)
+        
+    with open(email_body, "w") as email_body_file:
+        email_body_file.write(email_template)
 
-    print(f"Bug report generated and saved to {file_path}")
+
+    print(f"Bug report generated and saved to {bug_file}")
     
