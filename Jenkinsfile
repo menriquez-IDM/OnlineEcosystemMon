@@ -70,58 +70,59 @@ podTemplate(
 		    create_bug = true
 		    echo e.toString()
 		}
-    email_files = sh(script: 'find . -type f -name "*email.txt"', returnStdout: true).split() 
-    def email_lines = readFile(email_files[0]).split('\n')
-
-		if(email_files.size()){
-      stage('Install gh')
-      {
-        sh '''
-        type -p curl >/dev/null || ( apt update &&  apt install curl -y)
-            curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg |  dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
-            &&  chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
-            && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" |  tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-            &&  apt update \
-            &&  apt install gh -y
-            '''
-      }
-      stage('Create issue'){
-        withCredentials(
-            [usernamePassword(
-              credentialsId: 'e9d44acc-f790-425d-93e9-9dd54cf80ca3', 
-              passwordVariable: 'GH_TOKEN', 
-              usernameVariable: 'GH_USERNAME'
-            )]) {
-
-              sh '''
-                  git config --global --add safe.directory /home/jenkins/agent/workspace/menriquez/LiveSitesMonitoringNightly
-                  for f in $(find . -type f -name "*.log")
-                  do
-                    printf "Tryng to log ISSUE...  $f"  
-                    if gh issue list --state "open" --search "$f" | grep -q "$f"; then
-                      echo "Bug with title '$f' already exists, so skipping this section. Looking for more issues..."
-                    else
-                      # Create the bug
-                      gh issue create --title $f --body-file $f --assignee @me
-                      echo "Bug with title '$f' created successfully."
-                    fi
-                  done
+    // the most important notifications will be the emails, therefore we will check for them first
+    def notifications = sh(script: 'find . -type f -name "*email.txt"', returnStdout: true)
+    if(!notifications.isEmpty()){
+        stage('Install gh')
+        {
+          sh '''
+          type -p curl >/dev/null || ( apt update &&  apt install curl -y)
+              curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg |  dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+              &&  chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+              && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" |  tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+              &&  apt update \
+              &&  apt install gh -y
               '''
+        }
+        stage('Create issue'){
+          withCredentials(
+              [usernamePassword(
+                credentialsId: 'e9d44acc-f790-425d-93e9-9dd54cf80ca3', 
+                passwordVariable: 'GH_TOKEN', 
+                usernameVariable: 'GH_USERNAME'
+              )]) {
+  
+                sh '''
+                    git config --global --add safe.directory /home/jenkins/agent/workspace/menriquez/LiveSitesMonitoringNightly
+                    for f in $(find . -type f -name "*.log")
+                    do
+                      printf "Tryng to log ISSUE...  $f"  
+                      if gh issue list --state "open" --search "$f" | grep -q "$f"; then
+                        echo "Bug with title '$f' already exists, so skipping this section. Looking for more issues..."
+                      else
+                        # Create the bug
+                        gh issue create --title $f --body-file $f --assignee @me
+                        echo "Bug with title '$f' created successfully."
+                      fi
+                    done
+                '''
+            }
           }
-    		}
-        for (int i = 0; i < email_files.size(); i++) {
-          stage ("Emailing Issue ${i} ") {
-
-              send_to = email_lines[0]
-              subject_line = email_lines[2]
-              echo "Sending email to...   ${send_to}"
-              emailext (to: "${send_to}", 
-                          subject: "${subject_line}",
-                          body: "Assigned to: ${ readFile(email_files[i])}",
-                          mimeType: 'text/html');
+        def email_notifications = notifications.split()
+        def email_lines = ''
+          for (int i = 0; i < email_notifications.size(); i++) {
+            email_lines = readFile(email_notifications[i]).split('\n')
+            stage ("Emailing Issue ${i} ") {
+                send_to = email_lines[0]
+                subject_line = email_lines[2]
+                echo "Sending email to...   ${send_to}"
+                emailext (to: "${send_to}", 
+                            subject: "${subject_line}",
+                            body: "Assigned to: ${ readFile(email_notifications[i])}",
+                            mimeType: 'text/html');
+            }
           }
         }
-      }
     }
   }
 }
